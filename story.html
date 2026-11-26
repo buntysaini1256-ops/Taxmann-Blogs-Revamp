@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Story V9 – Newspaper style (centred, vertical ad, popular headlines)</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@1,800&amp;family=Inter:wght@400;500;600;700&amp;family=Source+Serif+4:wght@600;700&amp;display=swap">
+<style>
+body{margin:0;font-family:Inter,sans-serif;color:#1B2433;background:#FAFAF7}
+h1,h2,h3{font-family:'Source Serif 4',Georgia,serif;margin:0;color:#0F2A56}
+a{color:#0F2A56;text-decoration:none}a:hover{color:#B34F00}
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+.tag{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#8A3D00}
+.meta{font-size:13px;color:#4A5568}
+.card{background:#fff;border:1px solid #E4E2DB;border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.thumb{aspect-ratio:16/9;width:100%;box-sizing:border-box;background:#0F2A56;color:#fff;padding:20px;display:flex;align-items:flex-end;font-family:'Source Serif 4',serif;font-size:20px;font-weight:700;overflow:hidden;position:relative}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#0F2A56}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.chip{display:inline-block;padding:10px 16px;border:1px solid #CFCBC0;border-radius:999px;font-size:14px;color:#1B2433;background:#fff;white-space:nowrap}
+.chip:hover{background:#F7941D;border-color:#F7941D;color:#0F2A56}
+.sec{display:flex;justify-content:space-between;align-items:baseline;margin:72px 0 24px}
+.sec h2{font-size:32px}
+.more{font-size:14px;font-weight:600;border-bottom:2px solid #F7941D}
+.layout{display:block;margin-top:40px}
+.dd{position:relative}
+.ddbtn{font:inherit;font-weight:600;background:none;border:0;padding:0 4px;height:76px;cursor:pointer;color:#0F2A56;display:flex;align-items:center;gap:6px}
+.dd:hover .ddbtn,.dd:focus-within .ddbtn{color:#B34F00}
+.menu{display:none;position:absolute;top:100%;left:-16px;width:520px;max-width:90vw;box-sizing:border-box;background:#fff;border:1px solid #E4E2DB;border-radius:12px;padding:12px;box-shadow:0 12px 32px rgba(15,42,86,.14);grid-template-columns:1fr 1fr;gap:2px}
+.dd:hover .menu,.dd:focus-within .menu{display:grid}
+.menu a{padding:10px 12px;border-radius:8px;font-size:14px;font-weight:500}
+.menu a:hover{background:#FFF1DD}
+.hdr a:focus-visible,.ddbtn:focus-visible{outline:2px solid #0F2A56;outline-offset:2px}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.cat{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#fff;border:1px solid #E4E2DB;border-radius:10px;padding:0 18px;min-height:56px;font-size:15px;font-weight:600;color:#0F2A56}
+.cat:hover{background:#F7941D;border-color:#F7941D;color:#0F2A56}
+.cat.alt{background:#0F2A56;border-color:#0F2A56;color:#fff}
+.cat.alt:hover{background:#F7941D;color:#0F2A56}
+@media(max-width:900px){.cats{grid-template-columns:1fr 1fr}}
+.side{position:sticky;top:24px;background:#fff;border:1px solid #E4E2DB;border-radius:12px;overflow:hidden}
+.side h3{background:#F7941D;color:#0F2A56;font-family:Inter,sans-serif;font-size:15px;font-weight:700;padding:14px 20px}
+.side nav{display:flex;flex-direction:column;padding:8px 0}
+.side a{padding:10px 20px;font-size:14px;font-weight:500;color:#1B2433}
+.side a:hover{background:#FFF1DD;color:#0F2A56}
+.side .grp{padding:14px 20px 4px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#4A5568}
+.side .top{font-weight:700;color:#0F2A56;border-top:1px solid #E4E2DB}
+.content>.sec:first-child{margin-top:0}
+@media(max-width:900px){.grid3{grid-template-columns:1fr}.hero{grid-template-columns:1fr!important}.nav{gap:16px!important}.hdr{flex-wrap:wrap;height:auto!important;padding-top:10px;padding-bottom:10px;gap:12px!important}.hdr label{min-width:0!important;flex:1 1 100%}.menu{grid-template-columns:1fr}.layout{grid-template-columns:1fr}.side{position:static}.side nav{flex-direction:row;flex-wrap:wrap;padding:8px 12px}.side .grp{display:none}}
+.hb1{display:flex;align-items:center;gap:20px;height:84px}
+.hb .pill{height:52px;padding:0 20px;background:#F3F3EF;border-radius:12px;font-size:16px;color:#0F2A56}
+.hb .menu{left:0}
+.hsearch{flex:1;display:flex;align-items:center;gap:10px;border:1px solid #CFCBC0;border-radius:12px;padding:0 16px;height:52px;background:#fff}
+.signin{background:#FDEEEE;color:#C4221A;font-weight:700;font-size:16px;padding:0 28px;height:52px;display:flex;align-items:center;border-radius:12px}
+.signin:hover{background:#FADADA;color:#9E1A14}
+.hb2{display:flex;align-items:center;gap:6px;height:52px}
+.hb .nl{font:inherit;font-size:15px;font-weight:500;color:#0F2A56;background:none;border:0;cursor:pointer;height:52px;padding:0 12px;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.hb .nl:hover,.hb .dd:hover .nl{color:#B34F00;box-shadow:inset 0 -3px 0 #F7941D}
+.hb .sep{width:1px;height:24px;background:#CFCBC0;margin:0 8px}
+.hb2 .dd .menu{top:100%}
+@media(max-width:900px){.hb1{flex-wrap:wrap;height:auto;padding-top:12px;padding-bottom:12px}.hsearch{flex:1 1 100%;order:5}.hb2{flex-wrap:wrap;height:auto}.hb .sep{display:none}}
+.hc1,.hc2{max-width:1440px;margin:0 auto;box-sizing:border-box;padding:0 64px}
+.hc1{display:flex;align-items:center;height:104px}
+.logo{display:flex;flex-direction:column;align-items:stretch;width:auto;flex:none}
+.al{width:auto!important;max-width:1440px;margin-left:auto!important;margin-right:auto!important;padding-left:64px!important;padding-right:64px!important;box-sizing:border-box}
+@media(max-width:900px){.al{padding-left:20px!important;padding-right:20px!important}}
+.logo .lw{font-family:'Barlow Condensed',Impact,sans-serif;font-weight:800;font-style:italic;font-size:56px;line-height:.95;color:#E31E24;letter-spacing:-.02em}
+.logo sup{font-size:12px;font-style:normal;vertical-align:top;position:relative;top:4px;margin-left:2px}
+.logo .lt{display:flex;align-items:center;gap:6px;font-family:'Source Serif 4',serif;font-size:11px;font-weight:600;color:#1B2433;margin-top:4px;white-space:nowrap}
+.logo .lt i{flex:1;height:1px;background:#1B2433;min-width:10px}
+.hcsearch{flex:0 1 640px;margin-left:96px;display:flex;align-items:center;gap:16px;height:60px;border-radius:999px;background:#F7F7F7;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:0 24px}
+.hcsearch input{border:0;outline:0;background:none;flex:1;min-width:0;font:inherit;font-size:17px;letter-spacing:.06em;color:#1B2433}
+.hcsearch input::placeholder{color:#4A5568}
+.hcright{margin-left:auto;display:flex;align-items:center;gap:20px}
+.ppill,.bpill{display:flex;align-items:center;gap:8px;height:40px;border-radius:999px;padding:0 16px;font-size:17px;font-weight:500;white-space:nowrap}
+.ppill{border:1.5px solid #F7941D;color:#B85C00;padding-left:4px}
+.bpill{background:#F7941D;color:#0F2A56}
+.ppill:hover{color:#8A3D00}.bpill:hover{background:#E8830C;color:#0F2A56}
+.rs{width:30px;height:30px;border-radius:50%;background:#F7941D;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px}
+.vsep{width:1px;height:28px;background:#DDD}
+.badge{position:absolute;top:-8px;left:-6px;min-width:22px;height:22px;border-radius:50%;background:#D4281F;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.hc2{display:flex;align-items:center;gap:28px;height:56px}
+.hc .nl{font:inherit;font-size:18px;font-weight:500;letter-spacing:.01em;color:#0F2A56;background:none;border:0;cursor:pointer;height:56px;padding:0;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.hc .nl:hover,.hc .dd:hover .nl{color:#B34F00;box-shadow:inset 0 -3px 0 #F7941D}
+.hc .sep{width:1px;height:24px;background:#CFCBC0}
+.hc .menu{left:-16px}
+.hc a:focus-visible,.hc button:focus-visible,.hc input:focus-visible{outline:2px solid #0F2A56;outline-offset:2px}
+@media(max-width:900px){.hc1,.hc2{padding:0 20px}.hc1{flex-wrap:wrap;height:auto;padding-top:12px;padding-bottom:12px;gap:12px}.hcsearch{order:5;flex:1 1 100%;margin-left:0}.hcright{gap:10px}.hc2{flex-wrap:wrap;height:auto;gap:4px 20px}.hc .sep{display:none}.logo{width:170px}.logo .lw{font-size:40px}}
+.tk{display:flex;align-items:stretch;height:64px;background:#F3F3EF;border-top:3px solid #0F2A56;border-bottom:1px solid #E4E2DB}
+.tkl{flex:none;display:flex;align-items:center;background:#0F2A56;color:#fff;font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;padding:0 28px}
+.tkin{display:flex;align-items:stretch;height:100%;min-width:0}
+.tkv{flex:1;overflow:hidden;min-width:0}
+.tkt{display:flex;width:max-content;height:100%;animation:tkm 70s linear infinite}
+.tkg{display:flex;align-items:center;flex:none}
+.tki{display:flex;align-items:center;gap:12px;padding:0 40px;font-size:17px;font-weight:600;color:#0F2A56;white-space:nowrap;position:relative}
+.tki::after{content:"";position:absolute;right:-3px;width:6px;height:6px;border-radius:50%;background:#F7941D}
+.tki b{color:#B34F00;font-weight:700}
+.tkv:hover .tkt,.tkv:focus-within .tkt,.tk:has(.tkx:checked) .tkt{animation-play-state:paused}
+.tkpl{flex:none;display:flex;align-items:center;padding:0 20px;font-size:13px;font-weight:600;color:#0F2A56;cursor:pointer;position:relative}
+.tkx{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.tkpl:has(.tkx:focus-visible){outline:2px solid #0F2A56;outline-offset:-4px}
+.tkpl .off,.tk:has(.tkx:checked) .tkpl .on{display:none}
+.tk:has(.tkx:checked) .tkpl .off{display:inline}
+@keyframes tkm{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.tkt{animation:none}.tkv{overflow-x:auto}.tkg[aria-hidden]{display:none}}
+@media(max-width:900px){.tkin,.hb2{width:auto!important}.tkl{margin-left:0;padding:0 14px;font-size:12px}.tki{font-size:15px;padding:0 28px}.tkpl{padding:0 12px}}
+.hcnav{position:sticky;top:0;z-index:50;background:#fff;border-top:1px solid #EEECE6;border-bottom:1px solid #E4E2DB}
+.crumb{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;color:#4A5568;margin-top:28px}
+.crumb a{color:#4A5568}.crumb a:hover{color:#B34F00}.crumb .cur{color:#1B2433;max-width:560px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sh{max-width:1000px;margin-top:24px}
+.sh h1{font-size:44px;line-height:1.15;letter-spacing:-.01em}
+.smeta{display:flex;flex-wrap:wrap;gap:10px;font-size:15px;color:#4A5568;margin-top:20px}
+.sg{display:grid;grid-template-columns:240px minmax(0,1fr) 300px;gap:48px;align-items:start;margin-top:36px}
+.adl{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#4A5568;margin-bottom:8px}
+.ad{aspect-ratio:6/5;border:1px dashed #CFCBC0;background:#F3F3EF;border-radius:8px;display:flex;align-items:center;justify-content:center;text-align:center;color:#4A5568;font-size:14px;line-height:1.5;padding:16px}
+@media(max-width:1180px){.sg{grid-template-columns:220px minmax(0,1fr);gap:32px}.rside{grid-column:1/-1;position:static;flex-direction:row;flex-wrap:wrap}.rside>*{flex:1 1 280px}}
+.frame{aspect-ratio:16/9;background:#0F2A56;color:#fff;border-radius:12px;display:flex;align-items:flex-end;padding:28px;font-family:'Source Serif 4',serif;font-size:30px;font-weight:700;line-height:1.2}
+.inbrief{background:#EEF2F9;border-radius:12px;padding:24px 28px;margin-top:28px}
+.inbrief p{margin:8px 0 0;font-size:17px;line-height:1.7}
+.asof{font-size:14px;color:#4A5568;font-style:italic;margin:20px 0 0}
+.prose{font-size:18px;line-height:1.75}
+.prose p{margin:0 0 20px}.prose a{text-decoration:underline;text-underline-offset:3px}
+.prose h2{font-size:30px;line-height:1.25;margin:48px 0 16px;scroll-margin-top:90px}
+.prose ul{padding-left:22px;margin:0 0 24px}.prose li{margin:8px 0}
+.tryit{background:#FFF4E3;border-radius:12px;padding:24px 28px;margin:32px 0}.tryit p{margin:6px 0 0}
+.faq{border-bottom:1px solid #E4E2DB}.faq:first-of-type{border-top:1px solid #E4E2DB}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding:18px 0;font-family:'Source Serif 4',serif;font-weight:700;font-size:21px;color:#0F2A56}
+.faq summary::-webkit-details-marker{display:none}.faq summary::after{content:"+";font-size:26px;line-height:1}.faq[open] summary::after{content:"–"}
+.faq p{margin:0 0 20px}
+.cta{background:#0F2A56;color:#fff;border-radius:16px;padding:40px;margin:56px 0 40px;display:flex;justify-content:space-between;gap:32px;align-items:center;flex-wrap:wrap}
+.cta h2{color:#fff;font-size:30px}.cta p{margin:10px 0 0;color:#D6DEEC;max-width:460px;line-height:1.6}
+.ctab{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.btn{background:#F7941D;color:#0F2A56;font:inherit;font-weight:700;font-size:16px;border:0;border-radius:999px;padding:0 28px;height:48px;display:inline-flex;align-items:center;cursor:pointer}
+.btn:hover{background:#E8830C;color:#0F2A56}
+.ctal{color:#fff;text-decoration:underline;font-size:15px}.ctal:hover{color:#FFD08A}
+.sech{font-size:24px;margin:0 0 16px}
+.rel{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.relc,.pnc{padding:20px;gap:8px;color:#0F2A56}.relc b,.pnc b{font-family:'Source Serif 4',serif;font-size:18px;line-height:1.35}
+.tags{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:32px 0}
+.disc{background:#F3F3EF;border-radius:12px;padding:20px 24px;font-size:14px;line-height:1.65;color:#4A5568;margin:0 0 32px}
+.author{display:flex;gap:24px;border:1px solid #E4E2DB;border-radius:12px;padding:28px;background:#fff}
+.alogo{flex:none;font-family:'Barlow Condensed',Impact,sans-serif;font-weight:800;font-style:italic;font-size:28px;color:#E31E24}
+.author h3{font-size:22px;margin-bottom:8px}.author p{margin:0 0 12px;font-size:15px;line-height:1.65}
+.std summary{cursor:pointer;font-weight:600;font-size:15px;color:#0F2A56;margin:4px 0 8px}.std ul{font-size:15px;line-height:1.6;padding-left:20px}
+.soc{display:flex;gap:16px;font-size:14px;font-weight:600;margin:12px 0 0!important}
+.cmt{margin-top:56px}.cmt h2{font-size:30px;margin-bottom:8px}
+.fl{display:flex;flex-direction:column;gap:6px;font-size:15px;font-weight:600;margin-top:20px;flex:1}
+.fl input,.fl textarea{font:inherit;font-weight:400;border:1px solid #CFCBC0;border-radius:8px;padding:12px 14px;min-height:48px;box-sizing:border-box;width:100%}
+.frow{display:flex;gap:20px;flex-wrap:wrap}.chk{display:flex;gap:10px;align-items:center;font-size:14px;margin:20px 0}
+.pn{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:56px}
+.aside{position:sticky;top:88px;display:flex;flex-direction:column;gap:24px}
+.toc{background:#fff;border:1px solid #E4E2DB;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:4px}
+.toc h3{font-family:Inter,sans-serif;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#4A5568;margin-bottom:8px}
+.toc a{font-size:15px;line-height:1.4;padding:8px 0;border-top:1px solid #EEECE6;color:#0F2A56}.toc a:hover{color:#B34F00}
+.promo{border-top:3px solid #F7941D;background:#fff;border-radius:0 0 12px 12px;border-left:1px solid #E4E2DB;border-right:1px solid #E4E2DB;border-bottom:1px solid #E4E2DB;padding:24px}
+.promo h3{font-size:20px;margin-bottom:16px}
+.pimg{aspect-ratio:4/3;background:#0F2A56;color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;font-weight:600;line-height:1.4;margin-bottom:16px}
+@media(max-width:900px){.sg{grid-template-columns:1fr;gap:32px}.aside{position:static}.sh h1{font-size:30px}.rel,.pn{grid-template-columns:1fr}.cta{padding:28px}.author{flex-direction:column}.crumb .cur{max-width:100%}}
+html{scroll-behavior:smooth}
+.s9{display:grid;grid-template-columns:minmax(60px,1fr) 680px minmax(300px,1fr);gap:48px;align-items:start;margin-top:32px}
+.art9{max-width:680px}.art9 h1{font-size:44px;line-height:1.12;letter-spacing:-.01em}
+.deck{font-size:20px;line-height:1.5;color:#4A5568;margin:14px 0 0}
+.by{display:flex;gap:12px;align-items:center;margin-top:22px}.av{width:44px;height:44px;border-radius:50%;background:#0F2A56;color:#fff;font-family:'Source Serif 4',serif;font-weight:700;display:flex;align-items:center;justify-content:center}.by div{display:flex;flex-direction:column;font-size:14px;color:#4A5568}.by b{color:#1B2433;font-size:15px}
+.acts9{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 24px;padding:12px 0;border-top:1px solid #E4E2DB;border-bottom:1px solid #E4E2DB}.acts9 a{padding:8px 16px;border:1px solid #CFCBC0;border-radius:999px;background:#fff;font-size:14px;font-weight:600;color:#0F2A56}.acts9 a:hover{background:#F7941D;border-color:#F7941D}
+.fig9{margin:0}.f9{aspect-ratio:16/9;font-size:26px}.fig9 figcaption{font-size:13px;color:#4A5568;line-height:1.5;margin:10px 0 28px}
+.art9 .inbrief{margin-top:0}
+.askai{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid #E4E2DB;border-radius:12px;background:#fff;padding:18px 22px;margin:24px 0}.askai div{display:flex;flex-direction:column;gap:4px}.askai b{font-family:'Source Serif 4',serif;font-size:19px;color:#0F2A56}.askai p{margin:0;font-size:14px;color:#4A5568}
+.abtn9{background:#F7941D;color:#0F2A56;font-weight:700;padding:0 22px;height:42px;display:inline-flex;align-items:center;border-radius:999px}.abtn9:hover{background:#E8830C;color:#0F2A56}
+.inad{margin:8px 0 32px;text-align:center}.ad.wide{aspect-ratio:auto;height:90px}.ad.tall{aspect-ratio:1/2}
+.share9{position:sticky;top:120px;justify-self:end;display:flex;flex-direction:column;gap:10px}.share9 a{width:46px;height:46px;border-radius:50%;border:1px solid #CFCBC0;background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#0F2A56}.share9 a:hover{background:#F7941D;border-color:#F7941D}
+.rail9{width:300px;display:flex;flex-direction:column;gap:32px;align-self:stretch}
+.gh9{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:#4A5568;margin:0 0 14px;padding-top:12px;border-top:3px solid #F7941D;font-family:Inter,sans-serif}
+.pop9 ol{list-style:none;margin:0;padding:0}.pop9 li{display:flex;gap:14px;padding:14px 0;border-top:1px solid #EEECE6}.pop9 li:first-child{border-top:0;padding-top:0}
+.pop9 b{font-family:'Source Serif 4',serif;font-size:28px;line-height:1;color:#F7941D;min-width:20px}.pop9 a{font-family:'Source Serif 4',serif;font-weight:700;font-size:17px;line-height:1.35;color:#0F2A56}.pop9 a:hover{color:#B34F00}
+.vad{position:sticky;top:88px}
+@media(max-width:1100px){.s9{grid-template-columns:minmax(0,1fr)}.share9{position:static;flex-direction:row;justify-self:start}.rail9{width:auto}.vad{position:static}.art9 h1{font-size:30px}}
+.lad9{justify-self:end;width:160px}.ad.tall{aspect-ratio:4/15}.vad{position:static}
+.pop9{position:sticky;top:88px}
+.shr{margin-left:auto;display:flex;align-items:center;gap:8px}.shr span{font-size:13px;font-weight:600;color:#4A5568;margin-right:4px}
+.shr a{min-width:38px;height:38px;padding:0 10px;box-sizing:border-box;border-radius:999px;border:1px solid #CFCBC0;background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#0F2A56}.shr a:hover{background:#F7941D;border-color:#F7941D}
+@media(max-width:1100px){.lad9{display:none}.pop9{position:static}}
+.s9{grid-template-columns:160px minmax(0,680px) 300px!important;justify-content:space-between;gap:32px!important}
+.lad9{width:auto;justify-self:start;min-width:0}.lad9 .ad{box-sizing:border-box;padding:8px}
+@media(max-width:1340px){.s9{grid-template-columns:140px minmax(0,1fr) 260px!important;gap:28px!important}.rail9{width:260px}}
+@media(max-width:1100px){.s9{grid-template-columns:minmax(0,1fr)!important}.lad9{display:none}.rail9{width:auto}}
+.lad9 .gbox{background:#fff;border:1px solid #E4E2DB;border-radius:12px;padding:12px}
+.lad9 .gh3{font-family:Inter,sans-serif;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#4A5568;margin:0 0 10px}
+.lad9 .gbook{aspect-ratio:3/4;background:linear-gradient(160deg,#0F2A56,#1F4C94);color:#fff;border-radius:8px;display:flex;justify-content:center;text-align:center;padding:14px 8px;font-family:'Source Serif 4',serif;font-weight:700;font-size:15px;line-height:1.25}
+.lad9 .gbt{display:block;margin-top:10px;font-weight:600;font-size:13px;line-height:1.4;color:#B34F00;text-align:center}.lad9 .gbt:hover{text-decoration:underline}
+.s9{grid-template-columns:240px minmax(0,680px) 240px!important;justify-content:space-between;gap:40px!important;align-items:start;margin-top:40px}
+.art9 .crumb{margin:0 0 18px}
+.pop9,.vad,.rail9,.lad9{position:static!important}.rail9{width:240px;align-self:start}.lad9{width:240px;justify-self:start;align-self:start}
+.pop9 li{gap:10px;padding:12px 0}.pop9 b{font-size:22px;min-width:16px}.pop9 a{font-size:15px;line-height:1.35}
+.bk{position:relative}.bki{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.bkv{position:relative;overflow:hidden;aspect-ratio:2/3;border-radius:8px;background:#F3F3EF;border:1px solid #E4E2DB}
+.bkt{display:flex;width:400%;height:100%;transition:transform .4s ease}
+.bks{position:relative;flex:0 0 25.0%;height:100%;display:block}.bks img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bkph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:16px;font-family:'Source Serif 4',serif;font-weight:700;font-size:18px;line-height:1.25;color:#fff;background:linear-gradient(160deg,#0F2A56,#1F4C94)}
+.bkn{display:none;position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(15,42,86,.85);color:#fff;font-size:24px;line-height:1;align-items:center;justify-content:center;cursor:pointer}.bkn:hover{background:#0F2A56}.bkn.pv{left:8px}.bkn.nx{right:8px}
+.bkc{margin-top:12px;min-height:44px}.bkcap{display:none;font-size:14px;font-weight:600;line-height:1.4;color:#0F2A56;text-align:center}
+.bkd{display:flex;justify-content:center;gap:6px;margin-top:8px}.bkd label{width:8px;height:8px;border-radius:999px;background:#CFCBC0;cursor:pointer;transition:width .2s}
+#bk9-1:checked ~ .bkv .bkt{transform:translateX(-0.0%)}#bk9-1:checked ~ .bkv .s1{display:flex}#bk9-1:checked ~ .bkc .c1{display:block}#bk9-1:checked ~ .bkd label:nth-child(1){background:#F7941D;width:22px}#bk9-1:focus-visible ~ .bkd label:nth-child(1){outline:2px solid #0F2A56;outline-offset:2px}
+#bk9-2:checked ~ .bkv .bkt{transform:translateX(-25.0%)}#bk9-2:checked ~ .bkv .s2{display:flex}#bk9-2:checked ~ .bkc .c2{display:block}#bk9-2:checked ~ .bkd label:nth-child(2){background:#F7941D;width:22px}#bk9-2:focus-visible ~ .bkd label:nth-child(2){outline:2px solid #0F2A56;outline-offset:2px}
+#bk9-3:checked ~ .bkv .bkt{transform:translateX(-50.0%)}#bk9-3:checked ~ .bkv .s3{display:flex}#bk9-3:checked ~ .bkc .c3{display:block}#bk9-3:checked ~ .bkd label:nth-child(3){background:#F7941D;width:22px}#bk9-3:focus-visible ~ .bkd label:nth-child(3){outline:2px solid #0F2A56;outline-offset:2px}
+#bk9-4:checked ~ .bkv .bkt{transform:translateX(-75.0%)}#bk9-4:checked ~ .bkv .s4{display:flex}#bk9-4:checked ~ .bkc .c4{display:block}#bk9-4:checked ~ .bkd label:nth-child(4){background:#F7941D;width:22px}#bk9-4:focus-visible ~ .bkd label:nth-child(4){outline:2px solid #0F2A56;outline-offset:2px}
+@media(max-width:1340px){.s9{grid-template-columns:200px minmax(0,1fr) 220px!important;gap:28px!important}.rail9{width:220px}.lad9{width:200px}}
+@media(max-width:1100px){.s9{grid-template-columns:minmax(0,1fr)!important}.art9{order:1}.rail9{order:2;width:auto}.lad9{order:3;display:block;width:240px}}
+.s9{grid-template-rows:auto 1fr}
+.h9{grid-column:2;grid-row:1;max-width:680px}
+.stoc{grid-column:1;grid-row:2;align-self:start;position:sticky!important;top:96px;margin-top:8px}
+.art9{grid-column:2;grid-row:2}.rail9{grid-column:3;grid-row:2}
+.lad9{margin-top:560px!important}
+.by{margin:22px 0 28px}
+.gh3x{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#4A5568;margin:0 0 14px}
+.tlo{list-style:none;margin:0;padding:0 0 0 24px;position:relative}
+.tlo::before,.tlo::after{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:#E4E2DB}
+.tlo::after{background:#F7941D;transform-origin:top;transform:scaleY(0)}
+@supports (animation-timeline:scroll()){.tlo::after{animation:tf linear both;animation-timeline:scroll(root)}}
+@keyframes tf{to{transform:scaleY(1)}}
+.tlo li{position:relative;padding:8px 0}.tlo li::before{content:"";position:absolute;left:-24px;top:14px;width:12px;height:12px;box-sizing:border-box;border-radius:50%;background:#fff;border:2px solid #CFCBC0}
+.tlo a{font-size:15px;line-height:1.35;color:#0F2A56}.tlo a:hover{color:#B34F00}
+@media(prefers-reduced-motion:reduce){.tlo::after{animation:none!important;transform:scaleY(1)!important}}
+@media(max-width:1100px){.s9{grid-template-rows:none}.h9,.stoc,.art9,.rail9{grid-column:1!important;grid-row:auto!important}.stoc{position:static!important}.lad9{margin-top:0!important}}
+.s9{grid-template-rows:auto auto auto!important;row-gap:0!important}
+.h9{margin-bottom:40px}
+.art9b{grid-column:2;grid-row:3}
+.rail9{grid-row:2 / span 2!important}
+.rail9 .gh3x{padding-top:12px;border-top:3px solid #F7941D}
+.rr{list-style:none;margin:0;padding:0}.rr li{display:flex;flex-direction:column;gap:4px;padding:12px 0;border-top:1px solid #EEECE6}.rr li:first-child{border-top:0;padding-top:0}
+.rr a{font-weight:600;font-size:15px;line-height:1.4;color:#0F2A56}.rr a:hover{color:#B34F00}
+@media(max-width:1100px){.art9b{grid-column:1!important;grid-row:auto!important}.rail9{grid-row:auto!important}.s9{row-gap:24px!important}.h9{margin-bottom:0}}
+.rail9{grid-row:2!important;align-self:stretch!important}
+.rail9>section:last-child{position:sticky;top:96px}
+.stoc{z-index:1}
+@media(max-width:1100px){.rail9{grid-row:auto!important}.rail9>section:last-child{position:static}}
+.s9{grid-template-rows:auto auto auto auto!important}
+.art9c{grid-column:2;grid-row:4}
+.rail9{grid-row:2 / span 2!important;height:0;min-height:100%;align-self:stretch!important}
+@media(max-width:1100px){.art9c{grid-column:1!important;grid-row:auto!important}.rail9{height:auto;min-height:0;grid-row:auto!important}}
+.stocw{grid-column:1;grid-row:2;align-self:stretch;height:0;min-height:100%}
+@media(max-width:1100px){.stocw{height:auto;min-height:0;grid-column:1!important;grid-row:auto!important}}
+.rail9{height:auto!important;min-height:100%;align-self:stretch!important}.rail9>section:last-child{position:sticky!important;top:96px;align-self:flex-start}@media(max-width:1100px){.rail9>section:last-child{position:static!important}}.rail9{grid-row:2 / -1!important;height:auto!important;min-height:0!important;align-self:stretch!important}.rail9>section:last-child{position:sticky!important;top:96px;align-self:flex-start}@media(max-width:1100px){.rail9{grid-row:auto!important}.rail9>section:last-child{position:static!important}}html,body,button,input,textarea,select{font-family:roboto-ft,sans-serif}</style>
+
+</helmet>
+<div>
+<header class="hc" style="background:#fff">
+<div class="hc1">
+<a href="index.html" class="logo" aria-label="Taxmann – The Laws of India"><span class="lw">TAXMANN<sup>®</sup></span><span class="lt"><i></i>THE LAWS OF INDIA<i></i></span></a>
+<label class="hcsearch"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#F7941D" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"></circle><path d="M17 17l6 6"></path></svg><input aria-label="Search blogs" placeholder="Search across Taxmann.com | Premium" data-om-label="Search across"></label>
+<div class="hcright">
+<a href="#" class="ppill"><span class="rs">₹</span>Pricing <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M1 3h8L5 8z"></path></svg></a>
+<a href="index.html" class="bpill"><span>Blog</span> <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M1 3h8L5 8z"></path></svg></a>
+<span class="vsep" aria-hidden="true"></span>
+<a href="#" aria-label="Account" style="display:flex"><svg width="34" height="34" viewBox="0 0 34 34" fill="none" stroke="#F7941D" stroke-width="2.4" aria-hidden="true"><circle cx="17" cy="17" r="14"></circle><circle cx="17" cy="13" r="4.5"></circle><path d="M8 26c2-5 16-5 18 0"></path></svg></a>
+<a href="#" aria-label="Cart, 1 item" style="display:flex;position:relative;margin-left:4px"><svg width="38" height="34" viewBox="0 0 38 34" fill="none" stroke="#8EA2C6" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 5h5l4 16h16l4-12H10"></path><circle cx="15" cy="28" r="1.8"></circle><circle cx="26" cy="28" r="1.8"></circle></svg><span class="badge">1</span></a>
+</div>
+</div>
+</header>
+<div class="hc hcnav">
+<nav class="wrap al hb2" aria-label="Main" style="gap: 30px; display: flex">
+<div class="dd"><button class="ddbtn nl" type="button" aria-haspopup="true"><span>Category</span> <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"></path></svg></button><div class="menu"><a href="#">Account &amp; Audit</a><a href="#">Company Law</a><a href="#">Competition Law</a><a href="#">FEMA &amp; Banking</a><a href="#">GST &amp; Customs</a><a href="#">Income Tax</a><a href="#">Indian Acts</a><a href="#">Insolvency and Bankruptcy Code</a><a href="#">International Tax</a><a href="#">Labour &amp; Industrial Laws</a><a href="#">Other Laws</a><a href="#">Transfer Pricing</a><a href="#">Tax Audit Week</a></div></div><a class="nl" href="https://www.taxmann.com/post/press-release">Press Release</a><div class="dd"><button class="ddbtn nl" type="button" aria-haspopup="true"><span>Exam</span> <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"></path></svg></button><div class="menu" style="grid-template-columns:1fr;width:280px"><a href="#">CA</a><a href="#">CMA</a><a href="#">CS</a><a href="#">Free Amendments</a><a href="#">Important Announcement</a></div></div>
+
+<span class="sep" aria-hidden="true"></span>
+<a class="nl" href="https://www.taxmann.com/post/#">Union Budget</a>
+</nav>
+</div>
+
+<main class="wrap al" style="padding-bottom: 72px; height: 6540px">
+<div class="s9">
+<div class="h9"><nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">›</span><a href="listing.html">Blog</a><span aria-hidden="true">›</span><a href="#">Income Tax</a><span class="cur">[Analysis] 194J New Section under the Income-tax Act 2025 - Wh...</span></nav><p class="tag" style="margin: 0 0 10px; margin-top: 15px">Blog · Income Tax</p><h1>[Analysis] 194J New Section under the Income-tax Act 2025 – Where It Sits | Finding Any New Section | Citing Older Rulings</h1>
+
+<div class="by"><span class="av">T</span><div><b>By Taxmann</b><span>Last updated on 18 November, 2026 · 4 min read</span></div><nav class="shr" aria-label="Share this story"><span>Share</span></nav></div>
+<figure class="fig9"><div class="frame f9" style="background-image:url('https://www.taxmann.com/post/wp-content/uploads/2026/11/194J-New-Section-under-the-Income-tax-Act-2025-Where-It-Sits-Finding-Any-New-Section-Citing-Older-Rulings-300x176.jpg');background-size:cover;background-position:center"></div></figure></div><div class="stocw"><aside class="stoc" aria-label="On this page"><h3 class="gh3x">On this page</h3><ol class="tlo"><li><a href="#s1">Where section 194J sits now</a></li><li><a href="#s2">Finding the new section</a></li><li><a href="#s3">Citing older rulings</a></li><li><a href="#s4">Both Acts, side by side</a></li><li><a href="#s5">Frequently asked questions</a></li></ol></aside></div><article class="art art9">
+<div class="inbrief"><span class="tag">In brief</span><p>Section 194J of the Income-tax Act, 1961, on fees for professional or technical services, has no section of its own in the Income-tax Act, 2025. It now sits as section 393(1), the table for payments to residents, read with the definitions in section 402. Much of the 1961 Act moved to new addresses like this, while the rulings you rely on still cite the old numbers. This post sets out where 194J sits, how to find the new section for any 1961 one, and how to cite older rulings.</p></div><div class="askai"><div><span class="tag">New</span><b>Have a question on 194J?</b><p>Ask Taxmann.AI, built on a legacy of trust.</p></div><a class="abtn9" href="#">Try Taxmann.AI</a></div><span></span>
+
+
+
+<div class="prose">
+<h2 id="s1">1. Where section 194J sits now</h2>
+<p>The Income-tax Act, 2025 applies from 1 April 2026, and earlier years still bring up the Income-tax Act, 1961. Section numbers have changed, and older rulings cite the old sections.</p>
+<p>Section 194J shows how far the numbers moved. The 194 series no longer exists as separate sections: the deduction on fees for professional or technical services is now a row in the table in section 393(1), and the terms in it, such as “professional services” and “fees for technical services”, are defined in section 402. One 1961 section now sits across two 2025 sections.</p>
+<p>For tax year 2025-26 and earlier years, though, the old number is still the one to use: CBDT’s FAQs on section 536 keep proceedings for those years under the 1961 Act, and tax year 2026-27 onwards falls under the 2025 Act. Our <a href="#">analysis of the Income-tax Act 2025 vs 1961</a> sets out which Act applies to which year.</p>
+<h2 id="s2">2. How to find the new section for any 1961 section</h2>
+<p>Much of the 1961 Act carried over to new numbers, and one old section can sit across more than one new one, as 194J does. A reliable way to work:</p>
+<ul><li>Start from the section you know, and find its counterpart in the 2025 Act.</li><li>Read the counterpart sub-section by sub-section, because a change of words can change the answer.</li><li>Check the matching Rule too, in the Rules of 1962 and 2026.</li><li>Check the CBDT circulars and notifications on the provision, and which Act each one relates to.</li></ul>
+<div class="inad"><span class="adl">Advertisement</span><div class="ad wide">Ad slot · 728 × 90</div></div><h2 id="s3">3. Citing rulings that name the old sections</h2>
+<p>Most rulings you will cite were decided under the 1961 Act and use its section numbers. Before you cite one in a matter under the 2025 Act, compare the provision it interpreted with its 2025 counterpart. Where the wording carries over, the ruling is a strong starting point; where it changed, read the ruling with care.</p>
+<p>Then check the ruling’s own history: whether later courts followed it, distinguished it, or reversed or overruled it. A quick check before you rely on a section:</p>
+<ul><li>Which Act governs the proceeding, and for which tax year?</li><li>Which section of that Act, and what is its counterpart in the other?</li><li>Do the rulings you cite interpret the same words?</li><li>Which circulars and notifications apply, and under which Act?</li></ul>
+<h2 id="s4">4. Both Income-tax Acts, side by side</h2>
+<p>Taxmann.com | Research keeps both Acts, and both sets of rules, side by side.</p>
+<ul><li><b>Comparative (Act):</b> each section beside its counterpart, sub-section by sub-section, with a note on what changed.</li><li><b>Comparative (Rules):</b> the Rules of 1962 and 2026, paired.</li><li>Each document says which Act it relates to.</li><li>92,900+ Income Tax case laws with headnotes, the In Favour of filter and Judicial Analysis, which flags a ruling later reversed or overruled.</li><li>16,900+ CBDT circulars and notifications, linked to the provisions they interpret.</li><li>All About™ Income-tax Act: the Rules, circulars, notifications, case laws and articles for a section, in one view.</li></ul>
+<div class="tryit"><b>Try it in Research</b><p>Open Income Tax, Comparative (Act), search 194J: section 194J of the 1961 Act maps to sections 393 and 402 of the 2025 Act, with a table and a note on changes.</p></div>
+<div class="inad"><span class="adl">Advertisement</span><div class="ad wide">Ad slot · 728 × 90</div></div><h2 id="s5">5. Frequently asked questions</h2>
+<details class="faq" open=""><summary>Where is section 194J in the Income-tax Act, 2025?</summary><p>In the table in section 393(1), for payments to residents, read with the definitions in section 402. Comparative (Act) in Taxmann.com | Research maps section 194J of the 1961 Act to sections 393 and 402 of the 2025 Act.</p></details>
+<details class="faq"><summary>How do I find the new section for a 1961 section?</summary><p>Start from the section you know, find its counterpart in the 2025 Act and read it sub-section by sub-section, with the matching Rule and circulars. Comparative (Act) in Taxmann.com | Research sets each section beside its counterpart.</p></details>
+<details class="faq"><summary>Can I still cite rulings decided under the 1961 Act?</summary><p>Yes, as a starting point where the 2025 provision carries the same words. Compare the provision the ruling interpreted with its counterpart first, and check how later courts treated the ruling.</p></details>
+</div>
+</article><article class="art art9 art9b"><section class="cta"><div><h2>Try Taxmann.com | Research free for 7 days</h2><p>One trial per person in each product. Trial access is usually read-only, and printing and downloading may be off. A new trial is possible after 12 months.</p></div><div class="ctab"><a class="btn" href="#">Start your 7-day free trial</a><a href="#" class="ctal">See plans and prices</a></div></section>
+<div class="tags"><span class="meta" style="font-weight:600">Tags</span><a class="chip" href="#">Income-tax Act 2025</a><a class="chip" href="#">income tax</a><a class="chip" href="#">tds</a></div>
+</article><article class="art art9 art9c"><p class="disc"><b>Disclaimer:</b> The content/information published on the website is only for general information of the user and shall not be construed as legal advice. While the Taxmann has exercised reasonable efforts to ensure the veracity of information/content published, Taxmann shall be under no liability in any manner whatsoever for incorrect information/content published, if any.</p>
+<section class="author"><span class="alogo">TAXMANN</span><div><h3>Taxmann</h3><p>Taxmann Publications has a dedicated in-house Research &amp; Editorial Team. This team consists of Chartered Accountants, Company Secretaries, and Lawyers. This team works under the guidance and supervision of editor-in-chief Mr Rakesh Bhargava.</p><p>The Research and Editorial Team is responsible for developing reliable and accurate content for the readers. The team follows the six-sigma approach to achieve the benchmark of zero error in its publications and research platforms.</p>
+<details class="std"><summary>Our editorial standards</summary><ul><li>The statutory material is obtained only from the authorized and reliable sources</li><li>All the latest developments in the judicial and legislative fields are covered</li><li>Prepare the analytical write-up on current, controversial, and important issues to help the readers to understand the concept and its implications</li><li>Every content published by Taxmann is complete, accurate and lucid</li><li>All evidence-based statements are supported with proper reference to Section, Circular No., Notification No. or citations</li><li>The golden rules of grammar, style and consistency are thoroughly followed</li><li>Font and size that’s easy to read and remain consistent across all imprint and digital publications are applied</li></ul></details>
+<p class="soc"><a href="#">X</a><a href="#">Telegram</a><a href="#">LinkedIn</a><a href="#">Facebook</a><a href="#">Instagram</a><a href="#">Google</a></p></div></section>
+<section class="cmt"><h2>Leave a reply</h2><p class="meta">Your email address will not be published. Required fields are marked *</p>
+<label class="fl">Comment *<textarea rows="6"></textarea></label>
+<div class="frow"><label class="fl">Name *<input type="text"></label><label class="fl">Email *<input type="email"></label></div>
+<label class="chk"><input type="checkbox"> Save my name, email, and website in this browser for the next time I comment.</label>
+<button class="btn" type="button">Post comment</button></section>
+<div class="pn"><a class="card pnc" href="#"><span class="tag">← Previous post</span><b>Statutory Audit in India – Meaning | Applicability | Process | Audit Report and Due Date</b></a><a class="card pnc" href="#" style="text-align:right"><span class="tag">Next post →</span><b>[Analysis] GST Appellate Tribunal (GSTAT) – Where It Sits | Testing Its Rulings | The Rate for an Earlier Period</b></a></div>
+</article>
+<aside class="rail9"><div class="lad9" role="complementary" aria-label="Advertisement"><span class="adl">Advertisement</span><div class="bk"><input class="bki" type="radio" name="bk9" id="bk9-1" aria-label="Book 1" checked=""><input class="bki" type="radio" name="bk9" id="bk9-2" aria-label="Book 2"><input class="bki" type="radio" name="bk9" id="bk9-3" aria-label="Book 3"><input class="bki" type="radio" name="bk9" id="bk9-4" aria-label="Book 4"><div class="bkv"><div class="bkt"><a class="bks" href="https://www.taxmann.com/bookstore/product/40010324-law-practice-relating-to-code-on-social-security" target="_blank" rel="noopener"><span class="bkph">Law &amp; Practice Relating to Code on Social Security</span><img src="https://www.taxmann.com/post/wp-content/uploads/2026/09/Code-of-Social-Security-9789375616030-3rd-panel.jpg" alt="Law &amp; Practice Relating to Code on Social Security" loading="lazy"></a><a class="bks" href="https://www.taxmann.com/bookstore/product/40010323-law-practice-relating-to-code-on-wages" target="_blank" rel="noopener"><span class="bkph">Law &amp; Practice Relating to Code on Wages</span><img src="https://www.taxmann.com/post/wp-content/uploads/2026/09/LPR-Code-on-Wages-Sunil-HB-9789375610328-3rd-panel.jpg" alt="Law &amp; Practice Relating to Code on Wages" loading="lazy"></a><a class="bks" href="https://www.taxmann.com/bookstore/product/40010336-accounting-standards-as" target="_blank" rel="noopener"><span class="bkph">Accounting Standards (AS)</span><img src="https://www.taxmann.com/post/wp-content/uploads/2026/09/3rd-panel_Accounting-Standards-Ind-AS-9788167011060.jpg" alt="Accounting Standards (AS)" loading="lazy"></a><a class="bks" href="https://www.taxmann.com/bookstore/product/40010162-new-labour-codes-with-labour-rules" target="_blank" rel="noopener"><span class="bkph">New Labour Codes with Labour Rules</span><img src="https://www.taxmann.com/post/wp-content/uploads/2026/07/3rd-panel_New-Labour-Codes-with-Labour-Rules-9789375610946-1.jpg" alt="New Labour Codes with Labour Rules" loading="lazy"></a></div><label class="bkn pv s1" for="bk9-4" aria-label="Previous book">‹</label><label class="bkn pv s2" for="bk9-1" aria-label="Previous book">‹</label><label class="bkn pv s3" for="bk9-2" aria-label="Previous book">‹</label><label class="bkn pv s4" for="bk9-3" aria-label="Previous book">‹</label><label class="bkn nx s1" for="bk9-2" aria-label="Next book">›</label><label class="bkn nx s2" for="bk9-3" aria-label="Next book">›</label><label class="bkn nx s3" for="bk9-4" aria-label="Next book">›</label><label class="bkn nx s4" for="bk9-1" aria-label="Next book">›</label></div><div class="bkc"><span class="bkcap c1">Law &amp; Practice Relating to Code on Social Security</span><span class="bkcap c2">Law &amp; Practice Relating to Code on Wages</span><span class="bkcap c3">Accounting Standards (AS)</span><span class="bkcap c4">New Labour Codes with Labour Rules</span></div><div class="bkd"><label for="bk9-1" aria-label="Show book 1"></label><label for="bk9-2" aria-label="Show book 2"></label><label for="bk9-3" aria-label="Show book 3"></label><label for="bk9-4" aria-label="Show book 4"></label></div></div></div><section class="pop9"><h3 class="gh9">Popular stories</h3><ol><li><b>1</b><a href="#">Income Tax Deductions – Chapter VI-A (80C to 80U) | Limits | Old vs New Regime</a></li><li><b>2</b><a href="#">Exempt Income under Income Tax – Section 10 List | ITR Reporting</a></li><li><b>3</b><a href="#">Superannuation Fund – Meaning, Types, Withdrawal Rules, Taxability</a></li><li><b>4</b><a href="#">[Analysis] Bare Acts Online – Checking the Current Text</a></li></ol></section><section><h3 class="gh3x">Related reads</h3><ul class="rr"><li><span class="tag">Income Tax</span><a href="#">Section 393 of the Income-tax Act 2025</a></li><li><span class="tag">Income Tax</span><a href="#">Section 536 of the Income-tax Act 2025</a></li><li><span class="tag">Income Tax</span><a href="#">Income-tax Act 2025 vs Income-tax Act 1961</a></li></ul></section>
+</aside></div></main><footer style="background:#fff;border-top:1px solid #E4E2DB;padding:32px 0">
+<div class="wrap al meta" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px"><span>Copyright Taxmann.com. All Rights Reserved</span><span>Company · Policies · Business &amp; Support · Catalogues</span></div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2500}}'>
+class Component extends DCLogic {
+renderVals() { return {}; }
+}
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var slug = new URLSearchParams(window.location.search).get('slug') || 'deductions-under-income-tax';
+  var api = 'https://www.taxmann.com/post/wp-json/wp/v2/posts?slug=' + encodeURIComponent(slug) + '&_embed=1';
+  var title = document.querySelector('.art9 h1');
+  var crumb = document.querySelector('.crumb .cur');
+  var category = document.querySelector('.h9 > .tag');
+  var authorMeta = document.querySelector('.by div span');
+  var imageFrame = document.querySelector('.frame.f9');
+  var brief = document.querySelector('.inbrief p');
+  var prose = document.querySelector('.prose');
+  var legacySections = document.querySelectorAll('.art9b,.art9c');
+  if (!title || !prose) return;
+
+  function terms(post) {
+    var groups = post._embedded && post._embedded['wp:term'] || [];
+    var names = [];
+    groups.forEach(function (group) {
+      group.forEach(function (term) { if (term.taxonomy === 'category') names.push(term.name); });
+    });
+    return names.filter(function (name) { return name.toLowerCase() !== 'blog'; })[0] || 'Taxmann Blog';
+  }
+  function image(post, content) {
+    var media = post._embedded && post._embedded['wp:featuredmedia'];
+    if (media && media[0] && media[0].source_url) return media[0].source_url;
+    var found = content.querySelector('img');
+    return found ? found.src : '';
+  }
+  function dateLabel(iso) {
+    return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+  function htmlText(value) {
+    var node = document.createElement('span');
+    node.innerHTML = value || '';
+    return node.textContent || '';
+  }
+  function cleanContent(html) {
+    var parsed = new DOMParser().parseFromString(html, 'text/html');
+    parsed.querySelectorAll('script,style,iframe,object,embed,form').forEach(function (node) { node.remove(); });
+    var firstImage = parsed.querySelector('img');
+    if (firstImage && firstImage.parentElement && firstImage.parentElement.children.length === 1) {
+      firstImage.parentElement.remove();
+    } else if (firstImage) {
+      firstImage.remove();
+    }
+    return parsed.body.innerHTML;
+  }
+  fetch(api).then(function (response) {
+    if (!response.ok) throw new Error('Taxmann story returned ' + response.status);
+    return response.json();
+  }).then(function (posts) {
+    if (!posts.length) throw new Error('Taxmann story was not found');
+    var post = posts[0];
+    var parsed = new DOMParser().parseFromString(post.content.rendered || '', 'text/html');
+    var postTitle = htmlText(post.title.rendered);
+    var postCategory = terms(post);
+    var postImage = image(post, parsed);
+    title.textContent = postTitle;
+    if (crumb) crumb.textContent = postTitle;
+    if (category) category.textContent = 'Blog · ' + postCategory;
+    if (authorMeta) authorMeta.textContent = 'Last updated on ' + dateLabel(post.modified || post.date);
+    if (imageFrame && postImage) {
+      imageFrame.style.backgroundImage = 'url("' + postImage.replace(/"/g, '%22') + '")';
+      imageFrame.style.backgroundSize = 'cover';
+      imageFrame.style.backgroundPosition = 'center';
+    }
+    if (brief) {
+      var excerpt = document.createElement('div');
+      excerpt.innerHTML = post.excerpt && post.excerpt.rendered || '';
+      brief.textContent = (excerpt.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+    prose.innerHTML = cleanContent(post.content.rendered || '');
+    legacySections.forEach(function (section) { section.hidden = true; });
+    document.title = postTitle + ' | Taxmann Blog';
+  }).catch(function (error) {
+    console.warn('Using prototype story fallback:', error.message);
+  });
+});
+</script>
+</body>
+</html>
