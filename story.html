@@ -73,16 +73,16 @@ a{color:#0F2A56;text-decoration:none}a:hover{color:#B34F00}
 .logo sup{font-size:12px;font-style:normal;vertical-align:top;position:relative;top:4px;margin-left:2px}
 .logo .lt{display:flex;align-items:center;gap:6px;font-family:'Source Serif 4',serif;font-size:11px;font-weight:600;color:#1B2433;margin-top:4px;white-space:nowrap}
 .logo .lt i{flex:1;height:1px;background:#1B2433;min-width:10px}
-.hcsearch{flex:0 1 640px;margin-left:96px;display:flex;align-items:center;gap:12px;height:42px;border-radius:999px;background:#F7F7F7;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:0 18px}
-.hcsearch input{border:0;outline:0;background:none;flex:1;min-width:0;font:inherit;font-size:15px;letter-spacing:.04em;color:#1B2433}
-.hcsearch input::placeholder{color:#4A5568}
-.hcright{margin-left:auto;display:flex;align-items:center;gap:20px}
-.ppill,.bpill{display:flex;align-items:center;gap:8px;height:34px;border-radius:999px;padding:0 14px;font-size:15px;font-weight:500;white-space:nowrap}
+.hcsearch{flex:0 1 480px;width:480px;margin-left:36px;display:flex;align-items:center;gap:12px;height:42px;border-radius:999px;background:#F7F7F7;box-shadow:0 1px 4px rgba(0,0,0,.08);padding:0 18px;font-family:Roboto,Arial,sans-serif}
+.hcsearch input{border:0;outline:0;background:none;flex:1;min-width:0;font-family:Roboto,Arial,sans-serif;font-size:15px;letter-spacing:.04em;color:#1B2433}
+.hcsearch input::placeholder{color:#4A5568;font-family:Roboto,Arial,sans-serif}
+.hcright{margin-left:auto;display:flex;align-items:center;gap:12px}
+.ppill,.bpill{display:flex;align-items:center;gap:6px;height:30px;border-radius:999px;padding:0 10px;font-size:13px;font-weight:500;white-space:nowrap}
 .ppill{border:1.5px solid #F7941D;color:#B85C00;padding-left:4px}
 .bpill{background:#F7941D;color:#0F2A56}
 .ppill:hover{color:#8A3D00}.bpill:hover{background:#E8830C;color:#0F2A56}
-.rs{width:22px;height:22px;border-radius:50%;background:#F7941D;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
-.hcright a[aria-label="Account"] svg{width:28px;height:28px}.hcright a[aria-label="Cart, 1 item"]{display:none!important}
+.rs{width:18px;height:18px;border-radius:50%;background:#F7941D;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px}
+.hcright a[aria-label="Account"] svg{width:24px;height:24px}.hcright a[aria-label="Cart, 1 item"]{display:none!important}
 .vsep{width:1px;height:28px;background:#DDD}
 .badge{position:absolute;top:-8px;left:-6px;min-width:22px;height:22px;border-radius:50%;background:#D4281F;color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
 .hc2{display:flex;align-items:center;gap:28px;height:56px}
@@ -91,7 +91,7 @@ a{color:#0F2A56;text-decoration:none}a:hover{color:#B34F00}
 .hc .sep{width:1px;height:24px;background:#CFCBC0}
 .hc .menu{left:-16px}
 .hc a:focus-visible,.hc button:focus-visible,.hc input:focus-visible{outline:2px solid #0F2A56;outline-offset:2px}
-@media(max-width:900px){.hc1,.hc2{padding:0 20px}.hc1{flex-wrap:wrap;height:auto;padding-top:12px;padding-bottom:12px;gap:12px}.hcsearch{order:5;flex:1 1 100%;margin-left:0}.hcright{gap:10px}.hc2{flex-wrap:wrap;height:auto;gap:4px 20px}.hc .sep{display:none}.logo{width:170px}.logo .lw{font-size:40px}}
+@media(max-width:900px){.hc1,.hc2{padding:0 20px}.hc1{flex-wrap:wrap;height:auto;padding-top:12px;padding-bottom:12px;gap:12px}.hcsearch{order:5;flex:1 1 100%;width:auto;margin-left:0}.hcright{gap:10px}.hc2{flex-wrap:wrap;height:auto;gap:4px 20px}.hc .sep{display:none}.logo{width:170px}.logo .lw{font-size:40px}}
 .tk{display:flex;align-items:stretch;height:64px;background:#F3F3EF;border-top:3px solid #0F2A56;border-bottom:1px solid #E4E2DB}
 .tkl{flex:none;display:flex;align-items:center;background:#0F2A56;color:#fff;font-weight:700;font-size:15px;letter-spacing:.1em;text-transform:uppercase;padding:0 28px}
 .tkin{display:flex;align-items:stretch;height:100%;min-width:0}
@@ -252,8 +252,7 @@ html{scroll-behavior:smooth}
 <div>
 <header class="hc" style="background:#fff">
 <div class="hc1">
-<a href="index.html" class="logo" aria-label="Taxmann – The Laws of India"><span class="lw">TAXMANN<sup>®</sup></span><span class="lt"><i></i>THE LAWS OF INDIA<i></i></span></a>
-<label class="hcsearch"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#F7941D" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"></circle><path d="M17 17l6 6"></path></svg><input aria-label="Search blogs" placeholder="Search across Taxmann.com | Premium" data-om-label="Search across"></label>
+<a href="index.html" class="logo" aria-label="Taxmann – The Laws of India"><span class="lw">TAXMANN<sup>®</sup></span><span class="lt"><i></i>THE LAWS OF INDIA<i></i></span></a><label class="hcsearch"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#F7941D" stroke-width="3" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7.5"></circle><path d="M17 17l6 6"></path></svg><input aria-label="Search blogs" placeholder="Search across Taxmann.com | Blogs" data-om-label="Search across"></label>
 <div class="hcright">
 <a href="#" class="ppill"><span class="rs">₹</span>Pricing <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M1 3h8L5 8z"></path></svg></a>
 <a href="index.html" class="bpill"><span>Blog</span> <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor" aria-hidden="true"><path d="M1 3h8L5 8z"></path></svg></a>
